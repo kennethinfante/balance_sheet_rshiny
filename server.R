@@ -16,19 +16,18 @@ date_filters <- date_filters %>% arrange(desc(year), quarter_name, month)
 
 function(input, output, session) {
   
-  updateSelectInput(session,
+  updateCheckboxGroupInput(session,
                     "selected_year",
-                    choices = date_filters$year)
-  
-  # updatecheckboxGroupInput(inputId, label, choices, selected, inlin
+                    choices = unique(date_filters$year))
                      
   observeEvent(input$selected_year,
                {
                  quarter_opt <- date_filters %>%
-                   filter(year == input$selected_year) %>%
+                   filter(year %in% input$selected_year) %>%
+                   distinct(quarter_name) %>% 
                    pull(quarter_name)
                  
-                 updateSelectInput(session,
+                 updateCheckboxGroupInput(session,
                                    "selected_quarter",
                                    choices = quarter_opt)
                  
@@ -37,10 +36,11 @@ function(input, output, session) {
   observeEvent(input$selected_quarter,
                {
                  month_opt <- date_filters %>%
-                   filter(quarter_name == input$selected_quarter) %>%
+                   filter(year %in% input$selected_year) %>%
+                   filter(quarter_name %in% input$selected_quarter) %>%
                    pull(month_name)
                  
-                 updateSelectInput(session,
+                 updateCheckboxGroupInput(session,
                                    "selected_month",
                                    choices = month_opt)
                  
@@ -59,7 +59,10 @@ function(input, output, session) {
       filter(quarter_name == isolate(input$selected_quarter)) %>%
       filter(month_name == isolate(input$selected_month))
     
-    pt <- PivotTable$new()
+    pt <- PivotTable$new(totalStyle = list(
+      "font"="1em arial",
+      "font-weight"="bold",
+      "background-color"="#F2F2F2"))
     pt$addData(bs_filtered)
     pt$addColumnDataGroups("year", addTotal=FALSE)
     pt$addColumnDataGroups("quarter_name", addTotal=FALSE)
@@ -67,7 +70,7 @@ function(input, output, session) {
     pt$addRowDataGroups("BS_Flag", addTotal=FALSE)
     pt$addRowDataGroups("category")
     pt$addRowDataGroups("account_full_name", addTotal=FALSE)
-    pt$defineCalculation(calculationName="TotalDKK", summariseExpression="sum(std_amount)", format=list(nsmall=2, big.mark=",", decimal.mark=".", scientific=FALSE))
+    pt$defineCalculation(calculationName="TotalDKK", summariseExpression="sum(std_amount)", format=list(nsmall=0, big.mark=",", decimal.mark=".", scientific=FALSE))
     pt$evaluatePivot()
     
     pivottabler(pt)
