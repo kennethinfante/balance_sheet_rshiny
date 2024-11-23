@@ -1,9 +1,10 @@
-library("DT")
+library(htmlwidgets)
+library(pivottabler)
 
 navbarPage(
   "Balance Sheet",
   tabPanel(
-    "Select date filters",
+    "Management",
     fluidPage(fluidRow(
       column(
         selectInput("selected_year",
@@ -26,7 +27,7 @@ navbarPage(
       )
     )),
     actionButton("update_balance_sheet", label = "Update Balance Sheet", width = "100%"),
-    DTOutput("balance_sheet")
+    pivottablerOutput('balance_sheet')
   ),
   collapsible = TRUE
 )
