@@ -55,9 +55,9 @@ function(input, output, session) {
     }
     
     bs_filtered <- bs_all %>%
-      filter(year == isolate(input$selected_year)) %>%
-      filter(quarter_name == isolate(input$selected_quarter)) %>%
-      filter(month_name == isolate(input$selected_month))
+      filter(year %in% isolate(input$selected_year)) %>%
+      filter(quarter_name %in% isolate(input$selected_quarter)) %>%
+      filter(month_name %in% isolate(input$selected_month))
     
     pt <- PivotTable$new(totalStyle = list(
       "font"="1em arial",
