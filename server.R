@@ -2,7 +2,7 @@ library("tidyverse")
 library(htmlwidgets)
 library(pivottabler)
 
-bs_all <- read_csv("data-raw/rpt_balance_sheet.csv")
+bs_all <- read_csv("data-raw/balance_sheet_model.csv")
 
 # add custom columns
 bs_all <- bs_all %>%

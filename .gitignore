@@ -49,7 +49,6 @@ _config.py
 
 # R Specifics #
 ######################
-data-raw/
 test_server.R
 test_ui.R
 .Rproj.user
