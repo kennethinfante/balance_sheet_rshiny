@@ -54,10 +54,22 @@ function(input, output, session) {
       return()
     }
     
+    print(input$selected_year)
+    print(input$selected_quarter)
+    print(input$selected_month)
+    
+    filter2 <- possibly(.f = filter, otherwise = .data)
+    
     bs_filtered <- bs_all %>%
-      try(filter(year %in% isolate(input$selected_year)), silent=TRUE) %>%
-      try(filter(quarter_name %in% isolate(input$selected_quarter)), silent=TRUE) %>%
-      try(filter(month_name %in% isolate(input$selected_month)), silent=TRUE)
+      filter(year %in% isolate(input$selected_year)) %>% 
+      filter(quarter_name %in% isolate(input$selected_quarter)) %%
+      filter(month_name %in% isolate(input$selected_month))
+    
+    print(bs_filtered)
+    # bs_filtered <- bs_all %>%
+    #   try(filter(year %in% isolate(input$selected_year))) %>%
+    #   try(filter(quarter_name %in% isolate(input$selected_quarter))) %>%
+    #   try(filter(month_name %in% isolate(input$selected_month)))
     
     pt <- PivotTable$new(totalStyle = list(
       "font"="1em arial",
