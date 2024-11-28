@@ -4,7 +4,7 @@ library(pivottabler)
 navbarPage(
   "Balance Sheet",
   tabPanel(
-    "Management",
+    "Adjusted",
     fluidPage(fluidRow(
       column(
         checkboxGroupInput("selected_year",

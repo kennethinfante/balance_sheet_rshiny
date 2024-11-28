@@ -55,9 +55,9 @@ function(input, output, session) {
     }
     
     bs_filtered <- bs_all %>%
-      filter(year %in% isolate(input$selected_year)) %>%
-      filter(quarter_name %in% isolate(input$selected_quarter)) %>%
-      filter(month_name %in% isolate(input$selected_month))
+      try(filter(year %in% isolate(input$selected_year)), silent=TRUE) %>%
+      try(filter(quarter_name %in% isolate(input$selected_quarter)), silent=TRUE) %>%
+      try(filter(month_name %in% isolate(input$selected_month)), silent=TRUE)
     
     pt <- PivotTable$new(totalStyle = list(
       "font"="1em arial",
@@ -70,7 +70,7 @@ function(input, output, session) {
     pt$addRowDataGroups("BS_Flag", addTotal=FALSE)
     pt$addRowDataGroups("category")
     pt$addRowDataGroups("account_full_name", addTotal=FALSE)
-    pt$defineCalculation(calculationName="TotalDKK", summariseExpression="sum(std_amount)", format=list(nsmall=0, big.mark=",", decimal.mark=".", scientific=FALSE))
+    pt$defineCalculation(calculationName="Total", summariseExpression="sum(std_amount_gbp)", format=list(nsmall=0, big.mark=",", decimal.mark=".", scientific=FALSE))
     pt$evaluatePivot()
     
     pivottabler(pt)

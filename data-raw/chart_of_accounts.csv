@@ -1,4 +1,4 @@
-account_id,account_number,account_name,account_type_name,account_category,income_flag,balancesheet_flag,subsidiary
+ï»¿account_id,account_number,account_name,account_type_name,account_category,income_flag,balancesheet_flag,subsidiary
 113,94115,Accounts Payable,Fixed Asset,Not categorized,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 122,85920,Accounts Receivable,Equity,Not categorized,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 501,98100,Accrued Audit,Other Current Liability,Not categorized,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
@@ -136,7 +136,7 @@ account_id,account_number,account_name,account_type_name,account_category,income
 462,90500,"Equity, Beginning",Other Current Asset,Inventory,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 986,95403,Acquisition VAT on IT Equip Purchase with Reverse Payment,Accounts Receivable,Accounts Receivable,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 1251,85862,Escrow Account,Accounts Receivable,Accounts Receivable,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
-486,95400,Eu Acquisition VAT (€),Equity,Equity Capital,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
+486,95400,Eu Acquisition VAT (Ã„),Equity,Equity Capital,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 1199,89402,Eur Vendor/Customer Settlement,Equity,Retained Earnings,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 1173,85861,External Inventory In Transit,Equity,Retained Earnings,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
 394,81250,Fixtures,Equity,Equity Capital,FALSE,TRUE,"1, 16, 17, 18, 19, 20, 22, 27, 33, 34, 35, 36"
@@ -270,14 +270,14 @@ account_id,account_number,account_name,account_type_name,account_category,income
 1143,89170,Interest Checking -California Bank & Trust,Other Current Liability,Other Payables,FALSE,TRUE,18
 960,98160,Interest Payable,Fixed Asset,Intangible Fixed Assets,FALSE,TRUE,18
 426,83400,Interim Invoice Work In Progress,Accounts Receivable,Accounts Receivable,FALSE,TRUE,18
-419,83210,Inventories Departure Eu (€),Other Current Liability,Subordinated Loans,FALSE,TRUE,18
+419,83210,Inventories Departure Eu (Ã„),Other Current Liability,Subordinated Loans,FALSE,TRUE,18
 421,83160,Inventories Import Other Departure ($),Fixed Asset,Intangible Fixed Assets,FALSE,TRUE,18
 420,83150,Inventories Import Other Increase ($),Deferred Expense,Intangible Fixed Assets,FALSE,TRUE,18
 213,85854,Inventory Asset,Other Current Liability,Prepayments from Customers,FALSE,TRUE,18
 417,83110,Inventory Departure GBP,Other Current Liability,Other Payables,FALSE,TRUE,18
 216,85855,Inventory In Transit,Accounts Receivable,Accounts Receivable,FALSE,TRUE,18
 416,83100,Inventory Increase GBP,Accounts Payable,Accounts Payable,FALSE,TRUE,18
-418,83200,Inventory Increase Eu (€),Other Current Liability,Other Payables,FALSE,TRUE,18
+418,83200,Inventory Increase Eu (Ã„),Other Current Liability,Other Payables,FALSE,TRUE,18
 1263,83115,Inventory Writedown,Other Current Liability,Other Payables,FALSE,TRUE,18
 423,83300,IPO Warehouse,Other Current Liability,Tax Payables,FALSE,TRUE,18
 838,83130,Items In Transit,Long Term Liability,Leasing Debt,FALSE,TRUE,18
