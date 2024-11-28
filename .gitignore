@@ -52,3 +52,5 @@ _config.py
 test_server.R
 test_ui.R
 .Rproj.user
+.Rhistory
+rsconnect/

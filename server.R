@@ -10,6 +10,7 @@ bs_all <- bs_all %>%
   mutate(NS_BS_Flag = if_else(ns_bs_flag == "Assets", "Assets", "Liabilities & Equity")) %>% 
   arrange(year, quarter_name, month)
 
+print(bs_all)
 date_filters <- read_csv("data-raw/date_filters.csv")
 
 date_filters <- date_filters %>% arrange(desc(year), quarter_name, month)
@@ -54,18 +55,13 @@ function(input, output, session) {
       return()
     }
     
-    print(input$selected_year)
-    print(input$selected_quarter)
-    print(input$selected_month)
-    
-    filter2 <- possibly(.f = filter, otherwise = .data)
+    # filter2 <- possibly(.f = filter, otherwise = .data)
     
     bs_filtered <- bs_all %>%
       filter(year %in% isolate(input$selected_year)) %>% 
-      filter(quarter_name %in% isolate(input$selected_quarter)) %%
+      filter(quarter_name %in% isolate(input$selected_quarter)) %>%
       filter(month_name %in% isolate(input$selected_month))
     
-    print(bs_filtered)
     # bs_filtered <- bs_all %>%
     #   try(filter(year %in% isolate(input$selected_year))) %>%
     #   try(filter(quarter_name %in% isolate(input$selected_quarter))) %>%
