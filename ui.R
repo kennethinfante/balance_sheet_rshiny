@@ -26,6 +26,7 @@ navbarPage(
         width = 3
       )
     )),
+    # textOutput("last_update"),
     actionButton("update_balance_sheet", label = "Update Balance Sheet", width = "100%"),
     pivottablerOutput('balance_sheet')
   ),

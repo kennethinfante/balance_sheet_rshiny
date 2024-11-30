@@ -85,4 +85,13 @@ function(input, output, session) {
     
     pivottabler(pt)
   })
+  
+  # observeEvent(output$balance_sheet, {
+  #   last_update_time <- 
+  #     format(Sys.time(), "%b %d %Y %H:%M:%S")
+  #   renderText({
+  #     paste("Last updated ", last_update_time)
+  #   })
+  # })
+  
 }
