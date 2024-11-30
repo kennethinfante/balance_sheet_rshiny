@@ -47,6 +47,14 @@ function(input, output, session) {
                  
                })
     
+  try_filter <- function(.data, col, selection) { 
+    if (!is.null(selection)) {
+      .data %>% filter({{col}} %in% isolate({{selection}}))
+    } else {
+      .data
+    }
+  }
+  
   output$balance_sheet <- renderPivottabler({
     
     print(input$update_balance_sheet)
@@ -55,17 +63,11 @@ function(input, output, session) {
       return()
     }
     
-    # filter2 <- possibly(.f = filter, otherwise = .data)
-    
+    # created a custom filter function
     bs_filtered <- bs_all %>%
-      filter(year %in% isolate(input$selected_year)) %>% 
-      filter(quarter_name %in% isolate(input$selected_quarter)) %>%
-      filter(month_name %in% isolate(input$selected_month))
-    
-    # bs_filtered <- bs_all %>%
-    #   try(filter(year %in% isolate(input$selected_year))) %>%
-    #   try(filter(quarter_name %in% isolate(input$selected_quarter))) %>%
-    #   try(filter(month_name %in% isolate(input$selected_month)))
+      try_filter(year, input$selected_year) %>%
+      try_filter(quarter_name, input$selected_quarter) %>%
+      try_filter(month_name, input$selected_month)
     
     pt <- PivotTable$new(totalStyle = list(
       "font"="1em arial",
