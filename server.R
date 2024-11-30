@@ -10,7 +10,6 @@ bs_all <- bs_all %>%
   mutate(NS_BS_Flag = if_else(ns_bs_flag == "Assets", "Assets", "Liabilities & Equity")) %>% 
   arrange(year, quarter_name, month)
 
-print(bs_all)
 date_filters <- read_csv("data-raw/date_filters.csv")
 
 date_filters <- date_filters %>% arrange(desc(year), quarter_name, month)
@@ -84,14 +83,15 @@ function(input, output, session) {
     pt$evaluatePivot()
     
     pivottabler(pt)
+  
   })
   
-  # observeEvent(output$balance_sheet, {
-  #   last_update_time <- 
-  #     format(Sys.time(), "%b %d %Y %H:%M:%S")
-  #   renderText({
-  #     paste("Last updated ", last_update_time)
-  #   })
-  # })
+  output$last_update <- renderText({
+    updated = 0
+    if (input$update_balance_sheet > updated) {
+      updated = input$update_balance_sheet
+      paste("Last updated ", format(Sys.time(), "%b %d %Y %H:%M:%S"))
+    }
+  })
   
 }
