@@ -1,6 +1,7 @@
 library("tidyverse")
 library(htmlwidgets)
 library(pivottabler)
+library(glue)
 
 bs_all <- read_csv("data-raw/balance_sheet_model.csv")
 
@@ -13,6 +14,8 @@ bs_all <- bs_all %>%
 date_filters <- read_csv("data-raw/date_filters.csv")
 
 date_filters <- date_filters %>% arrange(desc(year), quarter_name, month)
+
+bs_updated <- 0
 
 function(input, output, session) {
   
@@ -87,11 +90,12 @@ function(input, output, session) {
   })
   
   output$last_update <- renderText({
-    updated = 0
-    if (input$update_balance_sheet > updated) {
-      updated = input$update_balance_sheet
+    # another way of updating global variable
+    if (input$update_balance_sheet > bs_updated) {
+      bs_updated <<- input$update_balance_sheet
       paste("Last updated ", format(Sys.time(), "%b %d %Y %H:%M:%S"))
     }
+
   })
   
 }
