@@ -9,6 +9,7 @@ bs_all <- read_csv("data-raw/balance_sheet_model.csv")
 bs_all <- bs_all %>%
   mutate(BS_Flag = if_else(bs_flag == "Assets", "Assets", "Liabilities & Equity")) %>% 
   mutate(NS_BS_Flag = if_else(ns_bs_flag == "Assets", "Assets", "Liabilities & Equity")) %>% 
+  mutate(month_num_name = paste(month, month_name)) %>% 
   arrange(year, quarter_name, month)
 
 date_filters <- read_csv("data-raw/date_filters.csv")
@@ -37,7 +38,7 @@ function(input, output, session) {
   observeEvent(input$selected_year,
                {
                  quarter_opt <- date_filters %>%
-                   filter(year %in% input$selected_year) %>%
+                   try_filter(year, input$selected_year) %>%
                    distinct(quarter_name) %>% 
                    pull(quarter_name)
                  
@@ -50,8 +51,8 @@ function(input, output, session) {
   observeEvent(input$selected_quarter,
                {
                  month_opt <- date_filters %>%
-                   filter(year %in% input$selected_year) %>%
-                   filter(quarter_name %in% input$selected_quarter) %>%
+                   try_filter(year, input$selected_year) %>%
+                   try_filter(quarter_name, input$selected_quarter) %>%
                    pull(month_name)
                  
                  updateCheckboxGroupInput(session,
@@ -62,12 +63,16 @@ function(input, output, session) {
   
   output$balance_sheet <- renderPivottabler({
     
-    print(input$update_balance_sheet)
+    # print(input$selected_quarter)
     
     if(input$update_balance_sheet == 0){
       return()
     }
-    
+
+    if(is.null(isolate(input$selected_year))) {
+      return()
+    }
+
     # created a custom filter function
     bs_filtered <- bs_all %>%
       try_filter(year, input$selected_year) %>%
@@ -80,8 +85,8 @@ function(input, output, session) {
       "background-color"="#F2F2F2"))
     pt$addData(bs_filtered)
     pt$addColumnDataGroups("year", addTotal=FALSE)
-    pt$addColumnDataGroups("quarter_name", addTotal=FALSE)
-    pt$addColumnDataGroups("month_name", addTotal=FALSE)
+    if(!is.null(isolate(input$selected_quarter))) pt$addColumnDataGroups("quarter_name", addTotal=FALSE)
+    if(!is.null(isolate(input$selected_month))) pt$addColumnDataGroups("month_num_name", addTotal=FALSE)
     pt$addRowDataGroups("BS_Flag", addTotal=FALSE)
     pt$addRowDataGroups("category")
     pt$addRowDataGroups("account_full_name", addTotal=FALSE)
@@ -93,12 +98,22 @@ function(input, output, session) {
   })
   
   output$last_update <- renderText({
-    # another way of updating global variable
-    if (input$update_balance_sheet > bs_updated) {
+  
+    if (!is.null(isolate(input$selected_year)) & 
+        (input$update_balance_sheet > bs_updated)) {
+        bs_updated <<- input$update_balance_sheet
+        return(paste("Last updated ",
+                     format(Sys.time(), "%b %d %Y %H:%M:%S")))
+    } 
+    
+    if (is.null(isolate(input$selected_year)) & (input$update_balance_sheet > bs_updated)) {
       bs_updated <<- input$update_balance_sheet
-      paste("Last updated ", format(Sys.time(), "%b %d %Y %H:%M:%S"))
+      return("Invalid selection")
     }
-
+    
+    return(paste("Last updated ",
+                 format(Sys.time(), "%b %d %Y %H:%M:%S")))
+  
   })
   
 ################## Netsuite ##################
@@ -109,7 +124,7 @@ function(input, output, session) {
   observeEvent(input$ns_selected_year,
                {
                  quarter_opt <- date_filters %>%
-                   filter(year %in% input$ns_selected_year) %>%
+                   try_filter(year, input$ns_selected_year) %>%
                    distinct(quarter_name) %>% 
                    pull(quarter_name)
                  
@@ -122,8 +137,8 @@ function(input, output, session) {
   observeEvent(input$ns_selected_quarter,
                {
                  month_opt <- date_filters %>%
-                   filter(year %in% input$ns_selected_year) %>%
-                   filter(quarter_name %in% input$ns_selected_quarter) %>%
+                   try_filter(year, input$ns_selected_year) %>%
+                   try_filter(quarter_name, input$ns_selected_quarter) %>%
                    pull(month_name)
                  
                  updateCheckboxGroupInput(session,
@@ -140,6 +155,10 @@ function(input, output, session) {
       return()
     }
     
+    if(is.null(isolate(input$ns_selected_year))) {
+      return()
+    }
+    
     # created a custom filter function
     bs_filtered <- bs_all %>%
       try_filter(year, input$ns_selected_year) %>%
@@ -152,8 +171,8 @@ function(input, output, session) {
       "background-color"="#F2F2F2"))
     pt$addData(bs_filtered)
     pt$addColumnDataGroups("year", addTotal=FALSE)
-    pt$addColumnDataGroups("quarter_name", addTotal=FALSE)
-    pt$addColumnDataGroups("month_name", addTotal=FALSE)
+    if(!is.null(isolate(input$ns_selected_quarter))) pt$addColumnDataGroups("quarter_name", addTotal=FALSE)
+    if(!is.null(isolate(input$ns_selected_month))) pt$addColumnDataGroups("month_num_name", addTotal=FALSE)
     pt$addRowDataGroups("NS_BS_Flag", addTotal=FALSE)
     pt$addRowDataGroups("ns_category")
     pt$addRowDataGroups("account_full_name", addTotal=FALSE)
@@ -165,11 +184,21 @@ function(input, output, session) {
   })
   
   output$ns_last_update <- renderText({
-    # another way of updating global variable
-    if (input$ns_update_balance_sheet > ns_bs_updated) {
+    
+    if (!is.null(isolate(input$ns_selected_year)) & 
+        (input$ns_update_balance_sheet > ns_bs_updated)) {
       ns_bs_updated <<- input$ns_update_balance_sheet
-      paste("Last updated ", format(Sys.time(), "%b %d %Y %H:%M:%S"))
+      return(paste("Last updated ",
+                   format(Sys.time(), "%b %d %Y %H:%M:%S")))
+    } 
+    
+    if (is.null(isolate(input$ns_selected_year)) & (input$ns_update_balance_sheet > ns_bs_updated)) {
+      ns_bs_updated <<- input$ns_update_balance_sheet
+      return("Invalid selection")
     }
+    
+    return(paste("Last updated ",
+                 format(Sys.time(), "%b %d %Y %H:%M:%S")))
     
   })
   
